@@ -1,58 +1,55 @@
 const router = require('express').Router();
-const { Tag, Product, ProductTag } = require('../../models');
+const { Category, Product } = require('../../models');
 
-// The `/api/tags` endpoint
+// The `/api/categories` endpoint
 
 router.get('/', (req, res) => {
-  Tag.findAll({include:[{model:Product, through:ProductTag}]})
+  // find all categories
+  // be sure to include its associated Products
+  Category.findAll({include:[Product]})
   .then(records =>{
     console.log(records)
     res.status(200).json(records)
-  }).catch(err =>{
-    console.log(err)
-    res.status(500).json(err)})
-  // find all tags
-  // be sure to include its associated Product data
+  }).catch(err => res.status(500).json(err))
 });
 
 router.get('/:id', (req, res) => {
-  Tag.findOne({where:{id:req.params.id},include:[{model:Product, through:ProductTag}]})
+  Category.findByPk(req.params.id, {include:[Product]})
   .then(records =>{
     console.log(records)
     res.status(200).json(records)
-  }).catch(err => {
-    console.log(err)
-    res.status(500).json(err)})
-  // find a single tag by its `id`
-  // be sure to include its associated Product data
+  }).catch(err => res.status(500).json(err))
+  // find one category by its `id` value
+  // be sure to include its associated Products
 });
 
 router.post('/', (req, res) => {
-  Tag.create(req.body)
+  Category.create(req.body)
   .then(records =>{
     console.log(records)
     res.status(200).json(records)
   }).catch(err => res.status(500).json(err))
 });
-  // create a new tag
-
 
 router.put('/:id', (req, res) => {
-  Tag.update({where:{id:req.params.id}})
+  Category.update(req.body, {where:{id:req.params.id}})
   .then(records =>{
     console.log(records)
     res.status(200).json(records)
   }).catch(err => res.status(500).json(err))
-  // update a tag's name by its `id` value
+  // update a category by its `id` value
 });
 
 router.delete('/:id', (req, res) => {
-  Tag.destroy({where:{id:req.params.id}})
+  Category.destroy({where:{id:req.params.id}})
   .then(records =>{
     console.log(records)
     res.status(200).json(records)
   }).catch(err => res.status(500).json(err))
-  // delete on tag by its `id` value
+// delete a category by its `id` value
 });
 
 module.exports = router;
+
+
+//update route isn't working

@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 
 // get one product
 router.get('/:id', (req, res) => {
-  Product.findOne({where:{id:req.params.id},include:[Category,{model:Tag, through:ProductTag}]})
+  Product.findByPk(req.params.id, {include:[Category,{model:Tag, through:ProductTag}]})
   .then(records =>{
     console.log(records)
     res.status(200).json(records)
@@ -110,3 +110,5 @@ router.delete('/:id', (req, res) => {
 });
 
 module.exports = router;
+
+//update routes aren't rendering
